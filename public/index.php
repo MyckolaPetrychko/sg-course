@@ -5,6 +5,9 @@
 
   use com\sg_group\pmv\App as Application;
 
+
+  session_start();
+
   $uri = $_SERVER['REQUEST_URI'];
   $method = $_SERVER['REQUEST_METHOD'];
 
@@ -16,10 +19,11 @@
 
   $app->get('/user');
 
+  $app->get('/logout');
+
   $app->post('/auth');
 
-
-  if ($app->response->getContent() === ""){
+  if ($app->getContent() === NULL && $app->getDocument() === NULL){
     $app->response->setContent('../' . VIEWS_DIR . '/404.html');
   }
 
@@ -62,7 +66,7 @@
                                         <p>Login</p>
                                       </a>';
                               }else{
-                                echo '<a href = "/logout">
+                                echo '<a href = "/logout" id = "logout">
                                   <i class = "pe-7s-angle-left"></i>
                                   <p>Logout</p>
                                 </a>';
@@ -73,7 +77,7 @@
                         if (isset($_SESSION['user'])){
                           echo '<li>
                                   <a href="/user">
-                                    <i class="pe-7s-angle-user"></i>
+                                    <i class="pe-7s-user"></i>
                                     <p>User</p>
                                   </a>
                                 </li>';
@@ -87,7 +91,13 @@
     </div><!--  end navbar -->
 
     <?php
-      echo $app->getContent();
+      if ($app->getContent() !== null) {
+        require ($app->getContent());
+      }
+
+      if (($app->getDocument()) !== null){
+        require ($app->getDocument());
+      }
     ?>
   </body>
   <script src="/assets/js/jquery-1.10.2.js" type="text/javascript"></script>

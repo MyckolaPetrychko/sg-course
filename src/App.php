@@ -40,4 +40,8 @@
       public function getContent(){
         return $this->response->getContent();
       }
+
+      public function getDocument(){
+        return $this->response->getDocument();
+      }
   }
